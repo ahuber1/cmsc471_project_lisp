@@ -1,0 +1,120 @@
+Global variables are defined with defvar, named with *
+
+(read) reads from console
+
+ The following lisp function takes name and prints it to the console:
+ 	(defun hello-you (name)
+ 		(format t "Hello ~a! ~%" name))
+
+~% is the newline character in lisp
+
+ ~a shows the value
+ ~s shows quotes around the value
+ ~d adds comma separators in number
+ ~10a adds 10 spaces for the value with extra space on the right
+ ~10@a adds 10 spaces for the value with extra space on the left
+ ~5f formats a floating point value with 5 decimals, trailing zeroes removed
+ ~,5f formats a floating point value with 5 decimals, trailing zeroes intact
+
+ cons cells = consecutive cells
+
+ last value of cons cells is nil
+
+ (defvar *number* 0) makes global variable, (setf *number* 3) sets *number* to 3 from 0
+
+(/ 5 4) = 5/4
+(/ 5 4.0) = 1.25
+
+(rem 5 4) = (mod 5 4) = 1
+
+ (expt 4 2) = 16
+ (sqrt 81) = 9
+ (exp 1) = 2.7182817
+ (log 1000 10) = 3
+ (eq 'dog 'doq) = T
+ (floor 5.5) = 5
+ (ceiling 5.5) = 6
+ (max 5 10) = 10
+ (min 5 10) = 5
+ (oddp 15) = T
+ (evenp 15) = Nil
+ (numberp 2) = T
+ (null nil) = T
+sin, cos, tan, asin, ...
+
+(defparameter *nam* 'Derek)
+
+(equalp ?) checks for equality, not checking type or casing
+
+use (progn ...) for executing multiple statements in if statement
+
+(defun get-school (age)
+	(case age
+		(5 (print "Kindergarten"))
+		(6 (print "FirstGrade"))
+		(otherwise (print "middle school"))))
+
+(terpri) prints new line
+
+(when ...) can be used to execute multiple statements when a condition is true; (unless ...) is the opposite
+
+You can replicate an if-else statement with the following syntax:
+	(cond ((>= *(age* 18)
+			(setf *college-ready* 'yes)
+			(format t "Ready for college ~%"))
+		((< *age* 18)
+			(setf *college-ready* 'no)
+			(format t "Not Ready for college ~%"))
+		(t (format t "Don't know ~%"))))
+
+(loop for x from 1 to 10
+	do (print x))
+
+(set x 1)
+(loop 
+	(format t "~d ~%" x)
+	(setq x (+ x 1))
+	(when (> x 10) (return x)))
+
+(loop for x in '(Peter, Paul, Mart)
+	(format t "~d ~%"))
+
+(dotimes (y 12)
+	(print x))
+Prints 0 thru 11
+
+caaaar; only max of 4 a/d's
+
+(listp ...) can check whether or not we have a list
+	(format t "Is a list = ~a ~%" (listp '(batman superman))
+
+(member 3 '(2 4 6)) tests whether or not 3 is in the list containing the elements 2, 4, and 6
+
+(push 1 nums) pushes 1 to the head of the list nums
+
+(nth 2 nums) returns the 2nd item in nums; just like Java, Lisp starts counting at 0
+
+The following code will print "Name : Superman Secret-Id : Clark Kent":
+	(defvar superman (list :name "Superman" :secret-id "Clark Kent"))
+	(defvar *hero-list* nil)
+	(push superman *hero-list*)
+	(dolist (hero *hero-list*)
+		(format t "~[~a : ~a ~]~%"  hero))
+
+Lisp has "assiciated lists", which to me sound like Python's dictionaries. Anyway, the way in which we can create 
+associated lists in Lisp is as follows:
+	(defparameter *heroes*
+		'((Superman (Clark Kent))
+		(Flash (Barry Allen))
+		(Batman (Bruce Wayne))))
+
+	(format t "Superman Data ~a ~%" (assoc 'superman *heroes*))
+
+(defclass mammal()
+	((name
+		:initarg :name
+		:initform (error "Must provide a name"))
+	(sound
+		:initarg :sound
+		:initform "No Sound"
+		:accessor mammal-sound)))
