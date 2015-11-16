@@ -76,10 +76,21 @@
 											(parent-game gm g)))))))))))
 	nil)
 
-
-
-
-
-
-
+(defun perform-move-with-heuristic (queue game origGame player)
+	(setq games (make-hash-table))
+	(setq count 0)
+	(setq keys nil)
+	(loop while (not (null queue)) do
+		(setq count (+ count 1))
+		(setq heuristic-value (calculate-heuristic game player origGame))
+		(setq lst (gethash 'heuristic-value games))
+		(if (null lst)
+			(setq (gethash 'heuristic-value games) '(game))
+			(setq (gethash 'heuristic-value games) (append (gethash 'heuristic-value games) game)))
+		(setq queue (cdr queue))
+		(setq game (car queue))
+		(if (not (member heuristic-value keys))
+			(append keys heuristic-value)))
+	(setq keys (sort keys #'>))
+	(car (gethash 'heuristic-value games)))
 
