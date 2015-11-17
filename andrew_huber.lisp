@@ -20,11 +20,12 @@
 
 
 (defun perform-move (player game)
-	(setq queue (cons nil game))
-		(setq g (convert-game game))
-		(setq g1 (perform-move-aux queue g player))
-		(restore-step-stack g1)
-		(xth-last-item-of-stack (step-stack g1) 1))
+	(setq queue nil)
+	(setq g (convert-game game))
+	(append queue g)
+	(setq g1 (perform-move-aux queue g player))
+	(restore-step-stack g1)
+	(xth-last-item-of-stack (step-stack g1) 1))
 
 (defun perform-move-aux (queue game player)
 	(dolist (g queue)
@@ -93,4 +94,25 @@
 			(append keys heuristic-value)))
 	(setq keys (sort keys #'>))
 	(car (gethash 'heuristic-value games)))
+
+(defun reveal-card (player game)
+	(setq queue nil)
+	(setq possible-cards-to-assassinate (get-possible-cards-to-assassinate game player))
+	(dolist (possible-card possible-cards-to-assassinate)
+		(setq cards-to-exchange '(possible-card))
+		(append queue (theorize (effect (peek (step-stack game))) nil (current-player game) player player cards-to-exchange game)))
+	(setq g1 (perform-move queue game player))
+	(if (not (null g1))
+		(while (and (not (null g1)) (not (eq (parent-game g1) game))) do
+			(setq g1 = (parent-game g1)))
+		(if (not (null g1))
+			(dolist (step (step-stack g1))
+				(if (is-action (effect step))
+					(+ (index-of (cards player) (cards-to-challenge step)))))))
+	(if (> (cards player) 0)
+		(+ (random (list-length (cards player))) 1)
+		-1))
+
+
+
 
