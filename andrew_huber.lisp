@@ -136,7 +136,7 @@
 				(parent-game copy-of-copy copy)
 				(backup-stacl copy)
 				(increment-player copy-of-copy)				
-				(give-coins-to-all-players copy-of-copy)
+				(give-coins-to-all-players copy-of-copy 2)
 				(clear-stacks copy-of-copy)
 				(append queue copy-of-copy))
 			(setq g1 (perform-move queue game player))
@@ -148,14 +148,50 @@
 					(xth-last-item-of-stack (step-stack g1) 2))))
 		nil))
 
-
-
-
-
-
-
-
-
-
-
-
+(defun challenge-card (card player game source target)
+	(if (not (null card))
+		(if (is-block (effect (peek (step-stack game))))
+			(progn
+				(setq block (effect (peek (step-stack game))))
+				(setq lst nil)
+				(setq queue nil)
+				(append lst (theorize challenge block player (instigator (peek (step-stack game))) player (cards-to-challenge (peek (step-stack game))) game))
+				(dolist (copy lst)
+					(setq copy-of-copy (copy-my-game game))
+					(parent-game copy game)
+					(parent-game copy-of-copy copy)
+					(backup-stacl copy)
+					(increment-player copy-of-copy)				
+					(give-coins-to-all-players copy-of-copy 2)
+					(clear-stacks copy-of-copy)
+					(append queue copy-of-copy))
+				(setq g1 (perform-move queue game player))
+				(if (not (null g1))
+					(if (is-challenge (effect (peek (step-stack g1))))
+						(T)
+						(nil))
+					(nil)))
+			(if (is-challenge (effect (peek (step-stack game))))
+				(nil)
+				(progn
+					(setq lst nil)
+					(setq q nil)
+					(setq game-copy (copy-my-game game))
+					(append lst (theorize challenge nil source (victim (peek (step-stack game))) player (cards-to-challenge (peek (step-stack game))) game-copy))
+					(dolist (copy list)
+						(setq copy-of-copy (copy-my-game game))
+						(parent-game copy game)
+						(parent-game copy-of-copy copy)
+						(backup-stacl copy)
+						(increment-player copy-of-copy)				
+						(give-coins-to-all-players copy-of-copy 2)
+						(clear-stacks copy-of-copy)
+						(append queue copy-of-copy))
+					(setq g1 (perform-move queue game player))
+					(if (null g1)
+						(nil)
+						(progn
+							(setq g1 (root g1))
+							(restore-step-stack g1)
+							(is-challenge (effect (xth-last-item-of-stack (step-stack g1) 2)))))))))
+	nil)
