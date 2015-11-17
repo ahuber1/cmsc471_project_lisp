@@ -113,6 +113,11 @@
 		(+ (random (list-length (cards player))) 1)
 		-1))
 
+(defun get-possible-cards-to-assassinate (game player)
+	(if (eq (current-player game) player)
+		(cards player)
+		*cards*))
+
 
 
 
