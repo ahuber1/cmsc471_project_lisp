@@ -118,6 +118,44 @@
 		(cards player)
 		*cards*))
 
+(defun block-move (move player game source target)
+	(if (is-action (effect move))
+		(progn
+			(setq action (effect move))
+			(setq blocks (get-possible-blocks action))
+			(setq lst nil)
+			(setq queue nil)
+			(dolist (counter blocks)
+				(setq game-copy (copy-my-game game))
+				(clear-stacks game-copy)
+				(append (step-stack game-copy) move)
+				(append lst (theorize (counteraction counter) (counteraction counter) source (instigator move) player (cards-to-challenge move) game-copy)))
+			(dolist (copy lst)
+				(setq copy-of-copy (copy-my-game game))
+				(parent-game copy game)
+				(parent-game copy-of-copy copy)
+				(backup-stacl copy)
+				(increment-player copy-of-copy)				
+				(give-coins-to-all-players copy-of-copy)
+				(clear-stacks copy-of-copy)
+				(append queue copy-of-copy))
+			(setq g1 (perform-move queue game player))
+			(if (null g1)
+				(null)
+				(progn
+					(setq g1 (root g1))
+					(restore-step-stack g1)
+					(xth-last-item-of-stack (step-stack g1) 2))))
+		nil))
+
+
+
+
+
+
+
+
+
 
 
 
