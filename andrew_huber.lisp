@@ -1,7 +1,7 @@
 (setf *SUPPRESS-SIMILAR-CONSTANT-REDEFINITION-WARNING* t)
 
-(defpackage :andrew_huber)
-(in-package :andrew_huber)
+(defpackage :ANDREW-HUBER)
+(in-package :ANDREW-HUBER)
 
 (defclass my-game ()
 	(
@@ -34,7 +34,7 @@
 		(if (and (not (null (winner g))) (players-equal (winner g) player))
 			(progn
 				(setq copy (copy-my-game g))
-				(setq (slot-value copy 'my-game-parent))
+				(setq (slot-value copy 'my-game-parent) (slot-value g 'my-game-parent))
 				(restore-step-stack copy)
 				g)
 			(if (and (not (null (winner g))) (not (players-equal (winner g) player)))
@@ -44,7 +44,7 @@
 					(progn
 						(setq p (current-player g))
 						(dolist (action *actions*)
-							(setq games (theorize action))
+							(setq games (theorize action nil p nil player nil g))
 							(dolist (gm games)
 								(setq c T)
 								(dolist (step-stack gm)
@@ -57,11 +57,11 @@
 									(progn
 										(increment-player gm)
 										(give-coins-to-all-players 2)
-										(parent-game gm g)))))
+										(set-parent-game gm g)))))
 						(dolist (card *cards*)
 							(setq action (get-action card))
 							(if (not (null action))
-								(setq games (theorize action))
+								(setq games (theorize action nil p nil player nil g))
 								(dolist (gm games)
 									(setq c T)
 									(dolist (step-stack gm)
@@ -134,7 +134,7 @@
 				(setq copy-of-copy (copy-my-game game))
 				(parent-game copy game)
 				(parent-game copy-of-copy copy)
-				(backup-stacl copy)
+				(backup-stack copy)
 				(increment-player copy-of-copy)				
 				(give-coins-to-all-players copy-of-copy 2)
 				(clear-stacks copy-of-copy)
@@ -160,7 +160,7 @@
 					(setq copy-of-copy (copy-my-game game))
 					(parent-game copy game)
 					(parent-game copy-of-copy copy)
-					(backup-stacl copy)
+					(backup-stack copy)
 					(increment-player copy-of-copy)				
 					(give-coins-to-all-players copy-of-copy 2)
 					(clear-stacks copy-of-copy)
@@ -182,7 +182,7 @@
 						(setq copy-of-copy (copy-my-game game))
 						(parent-game copy game)
 						(parent-game copy-of-copy copy)
-						(backup-stacl copy)
+						(backup-stack copy)
 						(increment-player copy-of-copy)				
 						(give-coins-to-all-players copy-of-copy 2)
 						(clear-stacks copy-of-copy)
