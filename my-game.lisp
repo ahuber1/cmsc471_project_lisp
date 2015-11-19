@@ -9,7 +9,11 @@
 		;; PUBLIC -- how many rounds (one turn per player) have been played
 		(rounds :accessor my-game-rounds :initform 0 :initarg :rounds)
 
-		(parent :accessor my-game-parent :initform nil :initarg :parent)		
+		(parent :accessor my-game-parent :initform nil :initarg :parent)	
+
+		(step-stack :accessor my-game-step-stack :initform nil :initarg :step-stack)	
+
+		(backup-stack :accessor my-game-backup-stack :initform nil :initarg :backup-stack)
 	)
 )
 

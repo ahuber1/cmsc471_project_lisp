@@ -182,3 +182,9 @@
 							(restore-step-stack g1)
 							(is-challenge (effect (xth-last-item-of-stack (step-stack g1) 2)))))))))
 	nil)
+
+(defun restore-step-stack (game)
+	(setf (slot-value game 'step-stack) nil)
+	(setf (slot-value game 'step-stack) (copy-stack (slot-value game 'backup-stack))))
+
+
