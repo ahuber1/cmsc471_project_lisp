@@ -3,30 +3,8 @@
 (defpackage :ANDREW-HUBER)
 (in-package :ANDREW-HUBER)
 
-(defclass my-game ()
-	(
-		;; PUBLIC -- list of players (each is an instance of type PLAYER)
-		(players :accessor my-game-players :initarg :players)
-
-		;; PUBLIC -- list of players who have been eliminated from the game
-		(eliminated :accessor my-game-eliminated :initform NIL :initarg :eliminated)
-
-		;; PUBLIC -- how many rounds (one turn per player) have been played
-		(rounds :accessor my-game-rounds :initform 0 :initarg :rounds)
-
-		(parent :accessor my-game-parent :initform nil :initarg :accessor)		
-	)
-)
-
-(defclass my-step ()
-	(
-		(effect :accessor step-effect :initarg effect)
-		(instigator :accessor step-instigator :initarg instigator)
-		(victim :accessor step-victim :initarg victim)
-		(ai :accessor step-ai :initarg ai)
-		(cards :accessor step-cards :initarg cards)
-	)
-)
+(load "my-game.lisp")
+(load "my-step.lisp")
 
 (defun perform-move (player game)
 	(setq queue nil)
