@@ -44,7 +44,10 @@
 (defun players-equal (player1 player2)
 	(eq (player-name player1) (player-name player2)))
 
-
+(defun copy-game (game)
+	(make-instance 'my-game :players (my-game-players game) :eliminated (my-game-eliminated game) 
+		:rounds (my-game-rounds game) :parent (my-game-parent game) :step-stack (my-game-step-stack game) 
+		:backup-stack (my-game-backup-stack game)))
 
 
 
