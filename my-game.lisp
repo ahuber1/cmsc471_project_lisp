@@ -20,3 +20,32 @@
 ; are these copied correctly?
 (defun convert-game (game)
 	(make-instance 'my-game :players (game-players game) :eliminated (game-eliminated game) :rounds (game-rounds game)))
+
+(defun restore-step-stack (game)
+	(setf (slot-value game 'step-stack) nil)
+	(setf (slot-value game 'step-stack) (copy-stack (slot-value game 'backup-stack))))
+
+(defun depth (game)
+	(depth-aux game 0))
+
+(defun depth (game depthVal)
+	(if (null game) depthVal (depth (my-game-parent game) (+ depthVal 1))))
+
+(defun winner (game)
+	(setq counter 0)
+	(setq winner nil)
+	(dolist (player (my-game-players game))
+		(if (not (lost player))
+			(progn
+				(setq winner player)
+				(setq counter (+ counter 1)))))
+	(if (eq counter 1) winner nil))
+
+(defun players-equal (player1 player2)
+	(eq (player-name player1) (player-name player2)))
+
+
+
+
+
+
