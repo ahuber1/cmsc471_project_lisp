@@ -14,12 +14,14 @@
 		(step-stack :accessor my-game-step-stack :initform nil :initarg :step-stack)	
 
 		(backup-stack :accessor my-game-backup-stack :initform nil :initarg :backup-stack)
+
+		(current-player :accessor my-game-current-player :initform 0)
 	)
 )
 
 ; are these copied correctly?
 (defun convert-game (game)
-	(make-instance 'my-game :players (game-players game) :eliminated (game-eliminated game) :rounds (game-rounds game)))
+	(setq converted-game (make-instance 'my-game :players (copy-players (game-players game)) :eliminated (game-eliminated game) :rounds (game-rounds game))))
 
 (defun restore-step-stack (game)
 	(setf (slot-value game 'step-stack) nil)
@@ -48,6 +50,38 @@
 	(make-instance 'my-game :players (my-game-players game) :eliminated (my-game-eliminated game) 
 		:rounds (my-game-rounds game) :parent (my-game-parent game) :step-stack (my-game-step-stack game) 
 		:backup-stack (my-game-backup-stack game)))
+
+(defun backup-stack (game) (backup-stack-aux (my-game-step-stack game)))
+
+(defun backup-stack-aux (backup-stack)
+	(if (null backup-stack) (backup-stack) (append (list (car backup-stack)) (backup-stack-aux (cdr backup-stack)))))
+
+(defun increment-player (game)
+	(setf (slot-value game 'current-player) (+ (my-game-current-player game) 1))
+	(if (eq (length (my-game-players game)) (my-game-current-player game))
+		(setf (slot-value game 'current-player) 0)))
+
+(defun give-coins-to-all-players (game num-coins)
+	(dolist (player (my-game-players game))
+		(if (not (member (my-game-eliminated game) player)) 
+			(setq (slot-value player 'player-coins) (+ (player-coins player) num-coins)))))
+
+(defun set-parent-game (game parentGame)
+	(setq (slot-value game 'parent) parentGame))
+
+(defun calculate-heuristic (game inquirer original-game)
+	(setq x 0)
+	(dolist (player (my-game-players game))
+		(setq coins-gained (- (player-coins player) (player-coins (find-player original-game player))))
+		(setq cards-lost (- (hand-count (find-player original-game player)) (hand-count player)))
+		(if (players-equal player inquirer) 
+			(setq x (+ x cards-lost)) 
+			(setq x (+ x(* (* (list-length (my-game-players game)) (list-length (my-game-players game))) cards-lost)))))
+	x)
+
+
+
+
 
 
 
