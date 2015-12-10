@@ -38,7 +38,7 @@
 (defconstant DefaultMove 'Income)
 
 ;; List of possible characters
-(defconstant Characters '( Assassin Ambassador Captain Contessa))
+(defconstant Characters '(Duke Assassin Ambassador Captain Contessa))
 
 ;; Number of cards per character
 (defconstant CardsPerCharacter 3)
@@ -48,6 +48,10 @@
 
 ;; Number of coins required for a coup
 (defconstant CoinsForCoup 7)
+
+;; True if stop on errors
+(defconstant *debug* nil)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -68,6 +72,9 @@
 
 (defclass game ()
 	(
+		;; PUBLIC -- number of players in the game
+		(numplayers :accessor game-numplayers :initarg :numplayers)
+
 		;; PRIVATE -- deck of cards, next card to be dealt is car()
 		(deck :accessor game-deck :initarg :deck)
 
@@ -110,13 +117,44 @@
 
 		;; PRIVATE -- True if the player has crashed
 		(crashed :accessor player-crashed :initform NIL :initarg :crashed)
+
+		;; PRIVATE -- Erro code if player crashed
+		(errorc :accessor player-error :initform NIL :initarg :error)
+
+		;; PRIVATE -- Following is a list of statistics that are used by the
+		;;    tournament code to report statistics. Using this information is
+		;;    fine for debugging your program, but off limits for actual play
+		(bluffs :accessor player-bluffs :initform 0)
+		(you-challenged-won :accessor player-you-challenged-won :initform 0)
+		(you-challenged-lost :accessor player-you-challenged-lost :initform 0)
+		(were-challenged-won :accessor player-were-challenged-won :initform 0)
+		(were-challenged-lost :accessor player-were-challenged-lost :initform 0)
+		(you-blocked :accessor player-you-blocked :initform 0)
+		(were-blocked :accessor player-were-blocked :initform 0)
 	)
 )
 
 ;; Calls a specific function from a player
 ;; Handles what to do if the player crashes
 (defun call-player (p fn game &rest args)
-	(handler-bind ((error #'(lambda (ex) (invoke-restart 'player-crash))))
+	(handler-bind
+		((error
+			 #'(lambda (ex)
+					 (progn
+						 (format t "!!!! ~s crashed against ~s: ~A~%"
+										 (player-name p)
+										 (mapcar #'player-name (game-players game)) ex)
+						 (setf (player-error p) ex)
+						 (with-open-file (stream
+															 (concatenate 'string "errors/"
+																						(symbol-name (player-name p)))
+															 :direction :output :if-exists :append
+															 :if-does-not-exist :create)
+							 (format stream "-- Crash ~s: ~A~%"
+											 (mapcar #'player-name (game-players game)) ex)
+							 (system::print-backtrace :out stream)
+							 (format stream "~%~%"))
+						 (if (not *debug*) (invoke-restart 'player-crash))))))
 		(restart-case (apply #'funcall (player-fn p fn) args)
 			(player-crash () (progn
 												 (setf (player-crashed p) T)
@@ -189,6 +227,7 @@
 														 :deck (generate-and-shuffle)
 														 :players (mapcar #'make-player players)
 														 :rounds 0
+														 :numplayers (length players)
 														 )))
 	(setf *GAME* game)
 	(trigger game "START" '())
@@ -215,7 +254,8 @@
 										(target (get-target game p (cdr player-request))))
 									(if (>= (player-coins p) 10)
 										;; Must coup is coins >= 10
-										(progn (format t "~s has ~s coins -- Forcing Coup~%" (get-name p) (player-coins p))
+										(progn (format t "~s has ~s coins -- Forcing Coup~%"
+																	 (get-name p) (player-coins p))
 													 (perform-move p 'Coup game target))
 										(if (member move Moves)
 											;; Use preferred action (if failed, just default to Income)
@@ -227,11 +267,10 @@
 												(format t "No action selected... ")
 												(perform-move p DefaultMove game))))))))))
 
-		;; Quit if there's only one player remaining
-		(if (= (length (game-players game)) 1)
+		;; Quit if there's none or one player remaining
+		(if (<= (length (game-players game)) 1)
 			(progn
 				(trigger game "GAMEOVER" '())
-				(format t "Only one player remains! Congratulations!")
 				(return-from gameloop)))
 
 		;; Quit if we've been running too long
@@ -249,7 +288,10 @@
 
 ;; Perform a given move
 (defun perform-move (player move game &optional target)
-	(cond ((eq move 'Income)
+	(progn
+		(if (not (find (move-card move) (player-hand player)))
+			(incf (player-bluffs player)))
+		(cond ((eq move 'Income)
 				 (trigger game "MOVE" (list 'Income player))
 				 (progn
 					 (incf (player-coins player))
@@ -266,7 +308,8 @@
 				 (trigger game "MOVE" (list 'Coup player target))
 				 (progn
 					 (decf (player-coins player) 7)
-					 (reveal-card target game (call-player target "REVEAL-CARD" game target game))
+					 (reveal-card target game
+												(call-player target "REVEAL-CARD" game target game))
 					 T))
 
 				((eq move 'Tax)
@@ -279,9 +322,14 @@
 				((and (eq move 'Assassinate) (>= (player-coins player) 3) target)
 				 (trigger game "MOVE" (list 'Assassinate player target))
 				 (progn (decf (player-coins player) 3)
-								(if (not (or (request-challenge (move-card 'Assassinate) player game target) (request-block 'Assassinate player game target)))
+								(if (not (or (request-challenge
+															 (move-card 'Assassinate)
+															 player game target)
+														 (request-block 'Assassinate player game target)))
 									(progn
-										(reveal-card target game (call-player target "REVEAL-CARD" game target game))
+										(reveal-card target game
+																 (call-player
+																	 target "REVEAL-CARD" game target game))
 										T) T)))
 
 				((eq move 'Exchange)
@@ -292,24 +340,35 @@
 						 (loop for s in (select-exchange player game)
 									 do (progn
 												(cond ((and (= (car s) 1) (= (cdr s) 1))
-															 ;; Swap first card in hand with first card in exchange
+															 ;; Swap hand[1] with exchange[1]
 															 (let ((tmp (car (player-hand player))))
-																		 (setf (car (player-hand player)) (car (player-exchange player)))
+																		 (setf (car (player-hand player))
+																					 (car (player-exchange player)))
 																		 (setf (car (player-exchange player)) tmp)))
+
 															((and (= (car s) 1) (= (cdr s) 2))
-															 ;; Swap first card in hand with second card in exchange
+															 ;; Swap hand[1] with exchange[2]
 															 (let ((tmp (car (player-hand player))))
-																		 (setf (car (player-hand player)) (cadr (player-exchange player)))
+																		 (setf (car (player-hand player))
+																					 (cadr (player-exchange player)))
 																		 (setf (cadr (player-exchange player)) tmp)))
-															((and (= (car s) 2) (not (null (cadr (player-hand player)))) (= (cdr s) 1))
-															 ;; Swap second card in hand (if available) with first card in exchange
+
+															((and (= (car s) 2)
+																		(not (null (cadr (player-hand player))))
+																		(= (cdr s) 1))
+															 ;; Swap hand[2] (if there) with exchange[1]
 															 (let ((tmp (cadr (player-hand player))))
-																		 (setf (cadr (player-hand player)) (car (player-exchange player)))
+																		 (setf (cadr (player-hand player))
+																					 (car (player-exchange player)))
 																		 (setf (car (player-exchange player)) tmp)))
-															((and (= (car s) 2) (not (null (cadr (player-hand player)))) (= (cdr s) 2))
-															 ;; Swap second card in hand (if available) with second card in exchange
+
+															((and (= (car s) 2)
+																		(not (null (cadr (player-hand player))))
+																		(= (cdr s) 2))
+															 ;; Swap hand[2] (if there) with exchange[2]
 															 (let ((tmp (cadr (player-hand player))))
-																		 (setf (cadr (player-hand player)) (cadr (player-exchange player)))
+																		 (setf (cadr (player-hand player))
+																					 (cadr (player-exchange player)))
 																		 (setf (cadr (player-exchange player)) tmp))))))
 						 (nconc (game-deck game) (player-exchange player))
 						 (trigger game "SHUFFLE" '())
@@ -319,26 +378,33 @@
 
 				((and (eq move 'Steal) target)
 				 (trigger game "MOVE" (list 'Steal player target))
-				 (if (not (or (request-challenge (move-card 'Steal) player game target) (request-block 'Steal player game target)))
+				 (if (not (or (request-challenge (move-card 'Steal) player game target)
+											(request-block 'Steal player game target)))
 					 (progn
 							 ;; Take at most two coins from target, or whatever they have left
-							 (setf (player-coins player) (+ (player-coins player) (min (player-coins target) 2)))
-							 (setf (player-coins target) (- (player-coins target) (min (player-coins target) 2)))
+							 (setf (player-coins player)
+										 (+ (player-coins player) (min (player-coins target) 2)))
+							 (setf (player-coins target)
+										 (- (player-coins target) (min (player-coins target) 2)))
 							 T) T))
 
-				(T (format t "Can not perform action ~s on ~s~%" move (if target (get-name target))))
-		))
+				(T (format t "Can not perform action ~s on ~s~%"
+									 move (if target (get-name target))))
+		)))
 
 ;; Ask all players if they can block a move
 (defun request-block (move player game &optional target)
-	;;(format t "~~ Checking if anyone wishes to block ~s's ~s~%" (get-name player) move)
-	(loop for p in (remove player (game-players game)) do
-				(let ((result (call-player p "BLOCK-MOVE" game move p game player target)))
+	(loop for blocker in (remove player (game-players game)) do
+				(let ((result (call-player blocker "BLOCK-MOVE"
+																	 game move blocker game player target)))
 					(if (and result)
 						(progn
-							(trigger game "BLOCK" (list p player move result))
-							(if (not (request-challenge result p game player))
-								;; If player wishes to block and there are no successful challenges, block works
+							(incf (player-you-blocked blocker))
+							(incf (player-were-blocked player))
+							(setf result (if (listp result) (car result) result))
+							(trigger game "BLOCK" (list blocker player move result))
+							(if (not (request-challenge result blocker game player))
+								;; Block succeeds if no challege
 								(return-from request-block T)))))))
 
 ;; Ask all players if they wish to challenge a card
@@ -347,21 +413,27 @@
 ;; game -- current game state
 ;; target -- If applicable, the target the player is using the card on
 (defun request-challenge (card player game &optional target)
-	;;(format t "~~ Checking if anyone wishes to challenge ~s's ~s~%" (get-name player) card)
-	(loop for p in (remove player (game-players game)) do
-				(if (call-player p "CHALLENGE-CARD" game card p game player target)
-					;; Player *p* wishes to challenge the card
+	(loop for challenger in (remove player (game-players game)) do
+				(if (call-player challenger "CHALLENGE-CARD"
+												 game card challenger game player target)
+					;; Player *challenger* wishes to challenge the card
 					(if (member card (player-hand player))
 						;; Accused player has card and wins challenge
 						(progn
-							(trigger game "CHALLENGE-LOST" (list p player card))
-							(reveal-card p game (call-player p "REVEAL-CARD" game p game))
+							(incf (player-you-challenged-lost challenger))
+							(incf (player-were-challenged-won player))
+							(trigger game "CHALLENGE-LOST" (list challenger player card))
+							(reveal-card challenger game (call-player challenger "REVEAL-CARD"
+																												game challenger game))
 							(return-from request-challenge NIL))
 
 						;; Accused player does not have card and lost challenge
 						(progn
-							(trigger game "CHALLENGE-WON" (list p player card))
-							(reveal-card player game (call-player player "REVEAL-CARD" game player game))
+							(incf (player-you-challenged-won challenger))
+							(incf (player-were-challenged-lost player))
+							(trigger game "CHALLENGE-WON" (list challenger player card))
+							(reveal-card player game (call-player player "REVEAL-CARD"
+																										game player game))
 							(return-from request-challenge T))))))
 
 ;; Ask player which cards they would like to keep from hand / exchange
@@ -398,22 +470,45 @@
 ;; Fire and event to all the players
 (defun trigger (game event arguments)
 	(cond
-		((string= event "START") (format t "!!! The game has started: ~{~S~^, ~}~%" (mapcar #'player-name (game-players game))))
+		((string= event "START") (format t "!!! The game has started: ~{~S~^, ~}~%"
+																		 (mapcar #'player-name (game-players game))))
 		((string= event "MOVE") (case (car arguments)
-							('Income (format t "! ~s: Performing Income~%" (get-name (cadr arguments))))
-							('ForeignAid (format t "! ~s: Performing Forign Aid~%" (get-name (cadr arguments))))
-							('Coup (format t "! ~s: Performing Coup against ~s~%" (get-name (cadr arguments)) (get-name (caddr arguments))))
-							('Tax (format t "! ~s: Performing Tax~%" (get-name (cadr arguments))))
-							('Assassinate (format t "! ~s: Performing Assassinate against ~s~%" (get-name (cadr arguments)) (get-name (caddr arguments))))
-							('Exchange (format t "! ~s: Performing Exchange~%" (get-name (cadr arguments))))
-							('Steal (format t "! ~s: Performing Steal against ~s~%" (get-name (cadr arguments)) (get-name (caddr arguments))))))
+							('Income (format t "! ~s: Performing Income~%"
+															 (get-name (cadr arguments))))
+							('ForeignAid (format t "! ~s: Performing Forign Aid~%"
+																	 (get-name (cadr arguments))))
+							('Coup (format t "! ~s: Performing Coup against ~s~%"
+														 (get-name (cadr arguments))
+														 (get-name (caddr arguments))))
+							('Tax (format t "! ~s: Performing Tax~%"
+														(get-name (cadr arguments))))
+							('Assassinate (format t "! ~s: Performing Assassinate against ~s~%"
+																		(get-name (cadr arguments))
+																		(get-name (caddr arguments))))
+							('Exchange (format t "! ~s: Performing Exchange~%"
+																 (get-name (cadr arguments))))
+							('Steal (format t "! ~s: Performing Steal against ~s~%"
+															(get-name (cadr arguments))
+															(get-name (caddr arguments))))))
 		((string= event "SHUFFLE") (format t "! Shuffling Deck~%"))
-		((string= event "REVEAL") (format t "! ~s: Revealing Card ~s~%" (get-name (car arguments)) (cadr arguments)))
-		((string= event "ELIMINATED") (format t "!!! ~s: ELIMINATED~%" (get-name (car arguments))))
-		((string= event "CHALLENGE-LOST") (format t "!! ~s: Challenged ~s's ~s and lost~%" (get-name (car arguments)) (get-name (cadr arguments)) (caddr arguments)))
-		((string= event "CHALLENGE-WON") (format t "!! ~s: Challenged ~s's ~s and won~%" (get-name (car arguments)) (get-name (cadr arguments)) (caddr arguments)))
-		((string= event "BLOCK") (format t "!! ~s: Blocking ~s's ~s with ~s~%" (get-name (car arguments)) (get-name (cadr arguments)) (caddr arguments) (cadddr arguments)))
-		((string= event "GAMEOVER") (format t "!!! The game is over. Winner: ~s~%" (player-name (car (game-players game)))))
+		((string= event "REVEAL") (format t "! ~s: Revealing Card ~s~%"
+																			(get-name (car arguments)) (cadr arguments)))
+		((string= event "ELIMINATED") (format t "!!! ~s: ELIMINATED~%"
+																					(get-name (car arguments))))
+		((string= event "CHALLENGE-LOST") (format t "!! ~s: Challenged ~s's ~s and lost~%"
+																							(get-name (car arguments))
+																							(get-name (cadr arguments))
+																							(caddr arguments)))
+		((string= event "CHALLENGE-WON") (format t "!! ~s: Challenged ~s's ~s and won~%"
+																						 (get-name (car arguments))
+																						 (get-name (cadr arguments))
+																						 (caddr arguments)))
+		((string= event "BLOCK") (format t "!! ~s: Blocking ~s's ~s with ~s~%"
+																		 (get-name (car arguments))
+																		 (get-name (cadr arguments))
+																		 (caddr arguments) (cadddr arguments)))
+		((string= event "GAMEOVER") (format t "!!! The game is over. Winner: ~s~%"
+																				(get-name (car (game-players game)))))
 		(T (format t "Event ~s Occurred~%" event)))
 	(loop for p in (game-players game) do
 				(if (player-fn-exists p "EVENT")
@@ -422,12 +517,20 @@
 ;; Flip a card to reveal it and remove from hand
 (defun reveal-card (player game cardnum) (progn
 	(if (eq (player-handcount player) 0) (return-from reveal-card NIL))
-	(if (or (null cardnum) (not (integerp cardnum)) (> cardnum (length (player-hand player)))) (setf cardnum 1))
+	(if (or (null cardnum)
+					(not (integerp cardnum))
+					(> cardnum (length (player-hand player))))
+		(setf cardnum 1))
 	(setf (player-handcount player) (decf (player-handcount player)))
-	(trigger game "REVEAL" (list player (if (= cardnum 1) (car (player-hand player)) (cadr (player-hand player)))))
+	(trigger game "REVEAL"
+					 (list player (if (= cardnum 1)
+													(car (player-hand player))
+													(cadr (player-hand player)))))
 	(if (= cardnum 1)
-		(setf (player-faceup player) (append (player-faceup player) (list (pop (player-hand player)))))
-		(setf (player-faceup player) (append (player-faceup player) (list (pop (cdr (player-hand player)))))))
+		(setf (player-faceup player)
+					(append (player-faceup player) (list (pop (player-hand player)))))
+		(setf (player-faceup player)
+					(append (player-faceup player) (list (pop (cdr (player-hand player)))))))
 	(if (= (length (player-hand player)) 0) (eliminate player game))))
 
 (defun eliminate (player game)
@@ -444,9 +547,10 @@
 
 (defun print-game-summary (game)
 	(format t "~%=== END OF GAME! ===~%~%")
-	(format t "Final deck: ~s~%" (game-deck game))
+	;; (format t "Final deck: ~s~%" (game-deck game))
 	(loop for p in (append (game-players game) (reverse (game-eliminated game)))
 				do (progn
+						 (if (player-crashed p) (format t "Player ~s crashed!~%" (get-name p)))
 						 (format t "Player ~s has ~s coins~%" 
 										 (get-name p) (player-coins p))
 						 (format t "  Player ~s's hand: ~s~%"

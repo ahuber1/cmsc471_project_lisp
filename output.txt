@@ -1,0 +1,711 @@
+!!! The game has started: P3, P2, P1
+Here's the initial deck: 
+(COUP::AMBASSADOR COUP::CONTESSA COUP::CAPTAIN COUP::AMBASSADOR COUP::CAPTAIN
+ COUP::DUKE COUP::CAPTAIN COUP::ASSASSIN COUP::DUKE COUP::CONTESSA
+ COUP::CONTESSA COUP::ASSASSIN COUP::AMBASSADOR COUP::DUKE COUP::ASSASSIN)
+Initial deal: two cards per player 
+Dealing card COUP::AMBASSADOR to player P3's COUP::HAND
+Dealing card COUP::CONTESSA to player P3's COUP::HAND
+Dealing card COUP::CAPTAIN to player P2's COUP::HAND
+Dealing card COUP::AMBASSADOR to player P2's COUP::HAND
+Dealing card COUP::CAPTAIN to player P1's COUP::HAND
+Dealing card COUP::DUKE to player P1's COUP::HAND
+
+<- END OF ROUND 0
+Player P3: coins 2, hand (2 cards) (COUP::AMBASSADOR COUP::CONTESSA), faceup NIL
+Player P2: coins 2, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 2, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 1
+! P3: Performing Forign Aid
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 1
+Player P3: coins 4, hand (2 cards) (COUP::AMBASSADOR COUP::CONTESSA), faceup NIL
+Player P2: coins 3, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 3, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 2
+! P3: Performing Income
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 2
+Player P3: coins 5, hand (2 cards) (COUP::AMBASSADOR COUP::CONTESSA), faceup NIL
+Player P2: coins 4, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 4, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 3
+! P3: Performing Forign Aid
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 3
+Player P3: coins 7, hand (2 cards) (COUP::AMBASSADOR COUP::CONTESSA), faceup NIL
+Player P2: coins 5, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 5, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 4
+! P3: Performing Forign Aid
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 4
+Player P3: coins 9, hand (2 cards) (COUP::AMBASSADOR COUP::CONTESSA), faceup NIL
+Player P2: coins 6, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 6, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 5
+! P3: Performing Tax
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 5
+Player P3: coins 12, hand (2 cards) (COUP::AMBASSADOR COUP::CONTESSA), faceup NIL
+Player P2: coins 7, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 7, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 6
+P3 has 12 coins -- Forcing Coup
+! P3: Performing Coup against P1
+! P1: Revealing Card COUP::CAPTAIN
+! P2: Performing Coup against P3
+! P3: Revealing Card COUP::AMBASSADOR
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 6
+Player P3: coins 5, hand (1 cards) (COUP::CONTESSA), faceup (COUP::AMBASSADOR)
+Player P2: coins 0, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 8, hand (1 cards) (COUP::DUKE), faceup (COUP::CAPTAIN)
+0 eliminated players
+
+-> BEGINNING ROUND 7
+! P3: Performing Steal against P1
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 7
+Player P3: coins 7, hand (1 cards) (COUP::CONTESSA), faceup (COUP::AMBASSADOR)
+Player P2: coins 1, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 7, hand (1 cards) (COUP::DUKE), faceup (COUP::CAPTAIN)
+0 eliminated players
+
+-> BEGINNING ROUND 8
+! P3: Performing Exchange
+Dealing card COUP::CAPTAIN to player P3's COUP::EXCHANGE
+Dealing card COUP::ASSASSIN to player P3's COUP::EXCHANGE
+! Shuffling Deck
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 8
+Player P3: coins 7, hand (1 cards) (COUP::CONTESSA), faceup (COUP::AMBASSADOR)
+Player P2: coins 2, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 8, hand (1 cards) (COUP::DUKE), faceup (COUP::CAPTAIN)
+0 eliminated players
+
+-> BEGINNING ROUND 9
+! P3: Performing Forign Aid
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 9
+Player P3: coins 9, hand (1 cards) (COUP::CONTESSA), faceup (COUP::AMBASSADOR)
+Player P2: coins 3, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 9, hand (1 cards) (COUP::DUKE), faceup (COUP::CAPTAIN)
+0 eliminated players
+
+-> BEGINNING ROUND 10
+! P3: Performing Coup against P1
+! P1: Revealing Card COUP::DUKE
+!!! P1: ELIMINATED
+! P2: Performing Income
+
+<- END OF ROUND 10
+Player P3: coins 2, hand (1 cards) (COUP::CONTESSA), faceup (COUP::AMBASSADOR)
+Player P2: coins 4, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 11
+Can not perform action COUP::ASSASSINATE on P2
+P3 can not COUP::ASSASSINATE...
+! P3: Performing Income
+! P2: Performing Income
+
+<- END OF ROUND 11
+Player P3: coins 3, hand (1 cards) (COUP::CONTESSA), faceup (COUP::AMBASSADOR)
+Player P2: coins 5, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 12
+! P3: Performing Exchange
+Dealing card COUP::ASSASSIN to player P3's COUP::EXCHANGE
+Dealing card COUP::CONTESSA to player P3's COUP::EXCHANGE
+! Shuffling Deck
+! P2: Performing Income
+
+<- END OF ROUND 12
+Player P3: coins 3, hand (1 cards) (COUP::CONTESSA), faceup (COUP::AMBASSADOR)
+Player P2: coins 6, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 13
+! P3: Performing Income
+! P2: Performing Income
+
+<- END OF ROUND 13
+Player P3: coins 4, hand (1 cards) (COUP::CONTESSA), faceup (COUP::AMBASSADOR)
+Player P2: coins 7, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 14
+Can not perform action COUP::COUP on P2
+P3 can not COUP::COUP...
+! P3: Performing Income
+! P2: Performing Coup against P3
+! P3: Revealing Card COUP::CONTESSA
+!!! P3: ELIMINATED
+!!! The game is over. Winner: P2
+
+=== END OF GAME! ===
+
+Player P2 has 0 coins
+  Player P2's hand: (COUP::CAPTAIN COUP::AMBASSADOR)
+  Player P2's faceup: NIL
+Player P3 has 5 coins
+  Player P3's hand: NIL
+  Player P3's faceup: (COUP::AMBASSADOR COUP::CONTESSA)
+Player P1 has 9 coins
+  Player P1's hand: NIL
+  Player P1's faceup: (COUP::CAPTAIN COUP::DUKE)
+!!! The game has started: P3, P2, ANDREW-HUBER
+Here's the initial deck: 
+(COUP::CONTESSA COUP::ASSASSIN COUP::CAPTAIN COUP::DUKE COUP::AMBASSADOR
+ COUP::CONTESSA COUP::AMBASSADOR COUP::CONTESSA COUP::ASSASSIN COUP::CAPTAIN
+ COUP::CAPTAIN COUP::AMBASSADOR COUP::DUKE COUP::ASSASSIN COUP::DUKE)
+Initial deal: two cards per player 
+Dealing card COUP::CONTESSA to player P3's COUP::HAND
+Dealing card COUP::ASSASSIN to player P3's COUP::HAND
+Dealing card COUP::CAPTAIN to player P2's COUP::HAND
+Dealing card COUP::DUKE to player P2's COUP::HAND
+Dealing card COUP::AMBASSADOR to player ANDREW-HUBER's COUP::HAND
+Dealing card COUP::CONTESSA to player ANDREW-HUBER's COUP::HAND
+
+<- END OF ROUND 0
+Player P3: coins 2, hand (2 cards) (COUP::CONTESSA COUP::ASSASSIN), faceup NIL
+Player P2: coins 2, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+Player ANDREW-HUBER: coins 2, hand (2 cards) (COUP::AMBASSADOR COUP::CONTESSA), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 1
+! P3: Performing Steal against ANDREW-HUBER
+
+"WHAT'S IN THE STACK????" !!!! ANDREW-HUBER crashed against (P3 P2 ANDREW-HUBER): 
+PROGN: variable ANDREW-HUBER::STACK has no value
+
+!!! ANDREW-HUBER: ELIMINATED
+!! ANDREW-HUBER: Challenged P3's COUP::CAPTAIN and won
+! P3: Revealing Card COUP::ASSASSIN
+! P2: Performing Income
+!!!! ANDREW-HUBER crashed against (P3 P2): 
+EVAL: undefined function ANDREW-HUBER::GAME-PLAYERS
+
+!!! ANDREW-HUBER: ELIMINATED
+No action selected... ! ANDREW-HUBER: Performing Income
+
+<- END OF ROUND 1
+Player P3: coins 2, hand (1 cards) (COUP::CONTESSA), faceup (COUP::ASSASSIN)
+Player P2: coins 3, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+2 eliminated players
+
+-> BEGINNING ROUND 2
+! P3: Performing Exchange
+Dealing card COUP::AMBASSADOR to player P3's COUP::EXCHANGE
+Dealing card COUP::CONTESSA to player P3's COUP::EXCHANGE
+! Shuffling Deck
+! P2: Performing Income
+
+<- END OF ROUND 2
+Player P3: coins 2, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::ASSASSIN)
+Player P2: coins 4, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+2 eliminated players
+
+-> BEGINNING ROUND 3
+! P3: Performing Steal against P2
+! P2: Performing Income
+
+<- END OF ROUND 3
+Player P3: coins 4, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::ASSASSIN)
+Player P2: coins 3, hand (2 cards) (COUP::CAPTAIN COUP::DUKE), faceup NIL
+2 eliminated players
+
+-> BEGINNING ROUND 4
+! P3: Performing Assassinate against P2
+! P2: Revealing Card COUP::DUKE
+! P2: Performing Income
+
+<- END OF ROUND 4
+Player P3: coins 1, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::ASSASSIN)
+Player P2: coins 4, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::DUKE)
+2 eliminated players
+
+-> BEGINNING ROUND 5
+Can not perform action COUP::ASSASSINATE on P2
+P3 can not COUP::ASSASSINATE...
+! P3: Performing Income
+! P2: Performing Income
+
+<- END OF ROUND 5
+Player P3: coins 2, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::ASSASSIN)
+Player P2: coins 5, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::DUKE)
+2 eliminated players
+
+-> BEGINNING ROUND 6
+! P3: Performing Steal against P2
+! P2: Performing Income
+
+<- END OF ROUND 6
+Player P3: coins 4, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::ASSASSIN)
+Player P2: coins 4, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::DUKE)
+2 eliminated players
+
+-> BEGINNING ROUND 7
+! P3: Performing Exchange
+Dealing card COUP::CONTESSA to player P3's COUP::EXCHANGE
+Dealing card COUP::ASSASSIN to player P3's COUP::EXCHANGE
+! Shuffling Deck
+! P2: Performing Income
+
+<- END OF ROUND 7
+Player P3: coins 4, hand (1 cards) (COUP::ASSASSIN), faceup (COUP::ASSASSIN)
+Player P2: coins 5, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::DUKE)
+2 eliminated players
+
+-> BEGINNING ROUND 8
+! P3: Performing Income
+! P2: Performing Income
+
+<- END OF ROUND 8
+Player P3: coins 5, hand (1 cards) (COUP::ASSASSIN), faceup (COUP::ASSASSIN)
+Player P2: coins 6, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::DUKE)
+2 eliminated players
+
+-> BEGINNING ROUND 9
+Can not perform action COUP::COUP on P2
+P3 can not COUP::COUP...
+! P3: Performing Income
+! P2: Performing Income
+
+<- END OF ROUND 9
+Player P3: coins 6, hand (1 cards) (COUP::ASSASSIN), faceup (COUP::ASSASSIN)
+Player P2: coins 7, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::DUKE)
+2 eliminated players
+
+-> BEGINNING ROUND 10
+Can not perform action COUP::COUP on P2
+P3 can not COUP::COUP...
+! P3: Performing Income
+! P2: Performing Coup against P3
+! P3: Revealing Card COUP::ASSASSIN
+!!! P3: ELIMINATED
+!!! The game is over. Winner: P2
+
+=== END OF GAME! ===
+
+Player P2 has 0 coins
+  Player P2's hand: (COUP::CAPTAIN)
+  Player P2's faceup: (COUP::DUKE)
+Player P3 has 7 coins
+  Player P3's hand: NIL
+  Player P3's faceup: (COUP::ASSASSIN COUP::ASSASSIN)
+Player ANDREW-HUBER crashed!
+Player ANDREW-HUBER has 3 coins
+  Player ANDREW-HUBER's hand: (COUP::AMBASSADOR COUP::CONTESSA)
+  Player ANDREW-HUBER's faceup: NIL
+Player ANDREW-HUBER crashed!
+Player ANDREW-HUBER has 3 coins
+  Player ANDREW-HUBER's hand: (COUP::AMBASSADOR COUP::CONTESSA)
+  Player ANDREW-HUBER's faceup: NIL
+Invalid game result ((P2 P3 ANDREW-HUBER ANDREW-HUBER)) -- discarding
+
+!!! The game has started: P3, P1, ANDREW-HUBER
+Here's the initial deck: 
+(COUP::CAPTAIN COUP::AMBASSADOR COUP::ASSASSIN COUP::CAPTAIN COUP::DUKE
+ COUP::CONTESSA COUP::CAPTAIN COUP::ASSASSIN COUP::AMBASSADOR COUP::CONTESSA
+ COUP::DUKE COUP::CONTESSA COUP::AMBASSADOR COUP::DUKE COUP::ASSASSIN)
+Initial deal: two cards per player 
+Dealing card COUP::CAPTAIN to player P3's COUP::HAND
+Dealing card COUP::AMBASSADOR to player P3's COUP::HAND
+Dealing card COUP::ASSASSIN to player P1's COUP::HAND
+Dealing card COUP::CAPTAIN to player P1's COUP::HAND
+Dealing card COUP::DUKE to player ANDREW-HUBER's COUP::HAND
+Dealing card COUP::CONTESSA to player ANDREW-HUBER's COUP::HAND
+
+<- END OF ROUND 0
+Player P3: coins 2, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 2, hand (2 cards) (COUP::ASSASSIN COUP::CAPTAIN), faceup NIL
+Player ANDREW-HUBER: coins 2, hand (2 cards) (COUP::DUKE COUP::CONTESSA), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 1
+Can not perform action COUP::COUP on P1
+P3 can not COUP::COUP...
+! P3: Performing Income
+No action selected... ! P1: Performing Income
+!!!! ANDREW-HUBER crashed against (P3 P1 ANDREW-HUBER): 
+EVAL: undefined function ANDREW-HUBER::GAME-PLAYERS
+
+!!! ANDREW-HUBER: ELIMINATED
+No action selected... ! ANDREW-HUBER: Performing Income
+
+<- END OF ROUND 1
+Player P3: coins 3, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 3, hand (2 cards) (COUP::ASSASSIN COUP::CAPTAIN), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 2
+! P3: Performing Forign Aid
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 2
+Player P3: coins 5, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 4, hand (2 cards) (COUP::ASSASSIN COUP::CAPTAIN), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 3
+! P3: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 3
+Player P3: coins 6, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 5, hand (2 cards) (COUP::ASSASSIN COUP::CAPTAIN), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 4
+! P3: Performing Steal against P1
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 4
+Player P3: coins 8, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 4, hand (2 cards) (COUP::ASSASSIN COUP::CAPTAIN), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 5
+! P3: Performing Tax
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 5
+Player P3: coins 11, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 5, hand (2 cards) (COUP::ASSASSIN COUP::CAPTAIN), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 6
+P3 has 11 coins -- Forcing Coup
+! P3: Performing Coup against P1
+! P1: Revealing Card COUP::ASSASSIN
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 6
+Player P3: coins 4, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 6, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::ASSASSIN)
+1 eliminated players
+
+-> BEGINNING ROUND 7
+! P3: Performing Steal against P1
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 7
+Player P3: coins 6, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 5, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::ASSASSIN)
+1 eliminated players
+
+-> BEGINNING ROUND 8
+! P3: Performing Exchange
+Dealing card COUP::CAPTAIN to player P3's COUP::EXCHANGE
+Dealing card COUP::ASSASSIN to player P3's COUP::EXCHANGE
+! Shuffling Deck
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 8
+Player P3: coins 6, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 6, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::ASSASSIN)
+1 eliminated players
+
+-> BEGINNING ROUND 9
+! P3: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 9
+Player P3: coins 7, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 7, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::ASSASSIN)
+1 eliminated players
+
+-> BEGINNING ROUND 10
+! P3: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 10
+Player P3: coins 8, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 8, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::ASSASSIN)
+1 eliminated players
+
+-> BEGINNING ROUND 11
+! P3: Performing Steal against P1
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 11
+Player P3: coins 10, hand (2 cards) (COUP::CAPTAIN COUP::AMBASSADOR), faceup NIL
+Player P1: coins 7, hand (1 cards) (COUP::CAPTAIN), faceup (COUP::ASSASSIN)
+1 eliminated players
+
+-> BEGINNING ROUND 12
+P3 has 10 coins -- Forcing Coup
+! P3: Performing Coup against P1
+! P1: Revealing Card COUP::CAPTAIN
+!!! P1: ELIMINATED
+!!! The game is over. Winner: P3
+
+=== END OF GAME! ===
+
+Player P3 has 3 coins
+  Player P3's hand: (COUP::CAPTAIN COUP::AMBASSADOR)
+  Player P3's faceup: NIL
+Player P1 has 7 coins
+  Player P1's hand: NIL
+  Player P1's faceup: (COUP::ASSASSIN COUP::CAPTAIN)
+Player ANDREW-HUBER crashed!
+Player ANDREW-HUBER has 3 coins
+  Player ANDREW-HUBER's hand: (COUP::DUKE COUP::CONTESSA)
+  Player ANDREW-HUBER's faceup: NIL
+!!! The game has started: P2, P1, ANDREW-HUBER
+Here's the initial deck: 
+(COUP::DUKE COUP::ASSASSIN COUP::DUKE COUP::AMBASSADOR COUP::AMBASSADOR
+ COUP::ASSASSIN COUP::CONTESSA COUP::ASSASSIN COUP::CAPTAIN COUP::CAPTAIN
+ COUP::CAPTAIN COUP::CONTESSA COUP::AMBASSADOR COUP::DUKE COUP::CONTESSA)
+Initial deal: two cards per player 
+Dealing card COUP::DUKE to player P2's COUP::HAND
+Dealing card COUP::ASSASSIN to player P2's COUP::HAND
+Dealing card COUP::DUKE to player P1's COUP::HAND
+Dealing card COUP::AMBASSADOR to player P1's COUP::HAND
+Dealing card COUP::AMBASSADOR to player ANDREW-HUBER's COUP::HAND
+Dealing card COUP::ASSASSIN to player ANDREW-HUBER's COUP::HAND
+
+<- END OF ROUND 0
+Player P2: coins 2, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 2, hand (2 cards) (COUP::DUKE COUP::AMBASSADOR), faceup NIL
+Player ANDREW-HUBER: coins 2, hand (2 cards) (COUP::AMBASSADOR COUP::ASSASSIN), faceup NIL
+0 eliminated players
+
+-> BEGINNING ROUND 1
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+!!!! ANDREW-HUBER crashed against (P2 P1 ANDREW-HUBER): 
+EVAL: undefined function ANDREW-HUBER::GAME-PLAYERS
+
+!!! ANDREW-HUBER: ELIMINATED
+No action selected... ! ANDREW-HUBER: Performing Income
+
+<- END OF ROUND 1
+Player P2: coins 3, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 3, hand (2 cards) (COUP::DUKE COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 2
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 2
+Player P2: coins 4, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 4, hand (2 cards) (COUP::DUKE COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 3
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 3
+Player P2: coins 5, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 5, hand (2 cards) (COUP::DUKE COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 4
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 4
+Player P2: coins 6, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 6, hand (2 cards) (COUP::DUKE COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 5
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 5
+Player P2: coins 7, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 7, hand (2 cards) (COUP::DUKE COUP::AMBASSADOR), faceup NIL
+1 eliminated players
+
+-> BEGINNING ROUND 6
+! P2: Performing Coup against P1
+! P1: Revealing Card COUP::DUKE
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 6
+Player P2: coins 0, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 8, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::DUKE)
+1 eliminated players
+
+-> BEGINNING ROUND 7
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 7
+Player P2: coins 1, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 9, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::DUKE)
+1 eliminated players
+
+-> BEGINNING ROUND 8
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 8
+Player P2: coins 2, hand (2 cards) (COUP::DUKE COUP::ASSASSIN), faceup NIL
+Player P1: coins 10, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::DUKE)
+1 eliminated players
+
+-> BEGINNING ROUND 9
+! P2: Performing Income
+P1 has 10 coins -- Forcing Coup
+! P1: Performing Coup against P2
+! P2: Revealing Card COUP::ASSASSIN
+
+<- END OF ROUND 9
+Player P2: coins 3, hand (1 cards) (COUP::DUKE), faceup (COUP::ASSASSIN)
+Player P1: coins 3, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::DUKE)
+1 eliminated players
+
+-> BEGINNING ROUND 10
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 10
+Player P2: coins 4, hand (1 cards) (COUP::DUKE), faceup (COUP::ASSASSIN)
+Player P1: coins 4, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::DUKE)
+1 eliminated players
+
+-> BEGINNING ROUND 11
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 11
+Player P2: coins 5, hand (1 cards) (COUP::DUKE), faceup (COUP::ASSASSIN)
+Player P1: coins 5, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::DUKE)
+1 eliminated players
+
+-> BEGINNING ROUND 12
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 12
+Player P2: coins 6, hand (1 cards) (COUP::DUKE), faceup (COUP::ASSASSIN)
+Player P1: coins 6, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::DUKE)
+1 eliminated players
+
+-> BEGINNING ROUND 13
+! P2: Performing Income
+No action selected... ! P1: Performing Income
+
+<- END OF ROUND 13
+Player P2: coins 7, hand (1 cards) (COUP::DUKE), faceup (COUP::ASSASSIN)
+Player P1: coins 7, hand (1 cards) (COUP::AMBASSADOR), faceup (COUP::DUKE)
+1 eliminated players
+
+-> BEGINNING ROUND 14
+! P2: Performing Coup against P1
+! P1: Revealing Card COUP::AMBASSADOR
+!!! P1: ELIMINATED
+!!! The game is over. Winner: P2
+
+=== END OF GAME! ===
+
+Player P2 has 0 coins
+  Player P2's hand: (COUP::DUKE)
+  Player P2's faceup: (COUP::ASSASSIN)
+Player P1 has 7 coins
+  Player P1's hand: NIL
+  Player P1's faceup: (COUP::DUKE COUP::AMBASSADOR)
+Player ANDREW-HUBER crashed!
+Player ANDREW-HUBER has 3 coins
+  Player ANDREW-HUBER's hand: (COUP::AMBASSADOR COUP::ASSASSIN)
+  Player ANDREW-HUBER's faceup: NIL
+
+
+===== Tournament Results =====
+P2
+    150.0 points per game
+    2 matches
+    2 first place
+    0 second place
+    0 third place
+    28 bluffs
+    0 times you challenged and won
+    0 times you challenged and lost
+    0 times you were challenged and won
+    0 times you were challenged and lost
+    0 times you blocked
+    0 times you were blocked
+    0 crashes
+
+P1
+    83.3 points per game
+    3 matches
+    0 first place
+    2 second place
+    1 third place
+    33 bluffs
+    0 times you challenged and won
+    0 times you challenged and lost
+    0 times you were challenged and won
+    0 times you were challenged and lost
+    0 times you blocked
+    0 times you were blocked
+    0 crashes
+
+P3
+    125.0 points per game
+    2 matches
+    1 first place
+    1 second place
+    0 third place
+    25 bluffs
+    0 times you challenged and won
+    0 times you challenged and lost
+    0 times you were challenged and won
+    0 times you were challenged and lost
+    0 times you blocked
+    0 times you were blocked
+    0 crashes
+
+ANDREW-HUBER
+    50.0 points per game
+    2 matches
+    0 first place
+    0 second place
+    2 third place
+    2 bluffs
+    0 times you challenged and won
+    0 times you challenged and lost
+    0 times you were challenged and won
+    0 times you were challenged and lost
+    0 times you blocked
+    0 times you were blocked
+    2 crashes
+

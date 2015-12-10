@@ -5,15 +5,15 @@
 
 (defun theorize (effect instigator victim player cards game)
 	(cond
-		((eq effect 'Block) (theorize-block effect instigator victim player cards game num-coins lst))
-		((eq effect 'Challenge) (theorize-challenge effect instigator victim player cards game num-coins lst))
-		((eq effect 'Assassinate) (theorize-assassinate effect instigator victim player cards game num-coins lst))
-		((eq effect 'Coup) (theorize-coup effect instigator victim player cards game num-coins lst))
-		((eq effect 'Exchange) (theorize-exchange effect instigator victim player cards game num-coins lst))
-		((eq effect coup::'ForeignAid) (theorize-foreign-aid effect instigator victim player cards game num-coins lst))
-		((eq effect 'Income) (theorize-income effect instigator victim player cards game num-coins lst))
-		((eq effect 'Steal) (theorize-steal effect instigator victim player cards game num-coins lst))
-		((eq effect 'Tax) (theorize-tax effect instigator victim player cards game num-coins lst))
+		((eq effect 'coup::Block) (theorize-block effect instigator victim player cards game))
+		((eq effect 'coup::Challenge) (theorize-challenge effect instigator victim player cards gamelst))
+		((eq effect 'coup::Assassinate) (theorize-assassinate effect instigator victim player cards game))
+		((eq effect 'coup::Coup) (theorize-coup effect instigator victim player cards game))
+		((eq effect 'coup::Exchange) (theorize-exchange effect instigator victim player cards game))
+		((eq effect 'coup::ForeignAid) (theorize-foreign-aid effect instigator victim player cards game))
+		((eq effect 'coup::Income) (theorize-income effect instigator victim player cards game))
+		((eq effect 'coup::Steal) (theorize-steal effect instigator victim player cards game))
+		((eq effect 'coup::Tax) (theorize-tax effect instigator victim player cards game))
 		(T error "Invalid effect")))
 
 (defun theorize-block (effect instigator victim player cards game)
@@ -44,7 +44,13 @@
 
 (defun theorize-assassinate-generic (effect instigator victim player cards game num-coins)
 	(setq lst nil)
-	(if (>= (player-coins instigator) num-coins)
+	(print "Instigator")
+	(print instigator)
+	(print (my-game-players game))
+	(setq instigator (nth (my-game-players game) instigator))
+	(print "Instigator")
+	(print instigator)
+	(if (>= (coup::player-coins instigator) num-coins)
 		(progn
 			(setq other-players (get-other-players-except game instigator))
 			(dolist (other-player other-players)
@@ -58,12 +64,12 @@
 	lst)
 
 (defun theorize-coup (effect instigator victim player cards game)
-	(theorize-assassinate-generic effect instigator victim player cards 7))
+	(theorize-assassinate-generic effect instigator victim player cards game 7))
 
 (defun theorize-exchange (effect instigator victim player cards game)
 	(setq lst nil)
 	(setq other-players (get-other-players-except game instigator))
-	(if (eq player-handcount instigator 2)
+	(if (eq (coup::player-handcount instigator 2))
 		(dolist (other-player other-players)
 			(dolist (card1 coup::Characters)
 				(dolist (card2 coup::Characters)
@@ -86,7 +92,7 @@
 	(setq lst nil)
 	(setq other-players (get-other-players-except game instigator))
 	(dolist (other-player other-players)
-		(if (>= (player-coins other-player) 2)
+		(if (>= (coup::player-coins other-player) 2)
 			(append lst (theorize-action effect instigator other-player player cards game))))
 	lst)
 
