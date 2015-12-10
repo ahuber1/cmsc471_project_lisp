@@ -80,7 +80,41 @@
 			(setq x (+ x(* (* (list-length (my-game-players game)) (list-length (my-game-players game))) cards-lost)))))
 	x)
 
+(defun get-other-players-except (player game)
+	(get-other-players-except-aux player (my-game-players game players-found)))
 
+(defun get-other-players-except-aux (player players players-found)
+	(if (null players)
+		(players-found)
+		(progn
+			(if (players-equal player (car players))
+				(append players-found))
+			(get-other-players-except-aux (player (cdr players) players-found)))))
+
+(defun lost (player)
+	(eq (player-handcount player) 0))
+
+(defun clear-stacks (game)
+	(empty-stack (my-game-step-stack))
+	(empty-stack (my-game-backup-stack)))
+
+(defun root (game)
+	(if (null (my-game-parent game))
+		() ; do nothing
+		(while (not (null (my-game-parent (my-game-parent (game))))) do
+			(setq game (my-game-parent game))))
+	game)
+
+
+(defun find-player (game player)
+	(find-player-aux game player (my-game-player game)))
+
+(defun find-player-aux (game player players)
+	(if (null players)
+		(nil)
+		(if (players-equal (player-name (car players)) player)
+			(car players)
+			(find-player-aux game player (cdr players)))))
 
 
 

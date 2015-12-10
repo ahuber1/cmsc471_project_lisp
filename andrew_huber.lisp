@@ -1,4 +1,4 @@
-(setf *SUPPRESS-SIMILAR-CONSTANT-REDEFINITION-WARNING* t)
+(setf *SUPPRESS-SIMILAR-CONSTANT-REDEITION-WARNING* t)
 
 (defpackage :ANDREW-HUBER)
 (in-package :ANDREW-HUBER)
@@ -9,7 +9,7 @@
 (load "my-queue.lisp")
 (load "coup.lisp")
 (load "theorize.lisp")
-;(load "execute.lisp")
+(load "execute.lisp")
 
 (setq *depth* 0)
 (setq *max-queue-size* 2000)
@@ -65,7 +65,7 @@
 											(progn
 												(backup-stack gm)
 												(setq step (pop (step-stack g)))
-												(setq c (and c (execute (effect step) (instigator step) (victim step) player (cards-to-challenge step) game T))))))
+												(setq c (and c (execute (effect step) (instigator step) (victim step) player (cards step) game T))))))
 									(if c
 										(progn
 											(increment-player gm)
@@ -94,8 +94,8 @@
 	(setq queue (make-instance 'queue))
 	(setq possible-cards-to-assassinate (get-possible-cards-to-assassinate game player))
 	(dolist (possible-card possible-cards-to-assassinate)
-		(setq cards-to-exchange '(possible-card))
-		(enqueue queue (theorize (effect (peek-from-stack (my-game-step-stack game))) nil (my-game-current-player game) player player cards-to-exchange game)))
+		(setq cards '(possible-card))
+		(enqueue queue (theorize (effect (peek-from-stack (my-game-step-stack game))) nil (my-game-current-player game) player player cards game)))
 	(setq g1 (perform-move queue game player))
 	(if (not (null g1))
 		(while (and (not (null g1)) (not (eq (my-game-parent g1) game))) do
@@ -103,7 +103,7 @@
 		(if (not (null g1))
 			(dolist (step (my-game-step-stack g1))
 				(if (is-action (my-step-effect step))
-					(+ (index-of (cards player) (cards-to-challenge step)))))))
+					(+ (index-of (cards player) (cards step)))))))
 	(if (> (cards player) 0)
 		(+ (random (list-length (cards player))) 1)
 		-1))
@@ -125,7 +125,7 @@
 				(clear-stacks copy)
 				(push-to-stack (my-game-step-stack copy) move)
 				(append lst (theorize (get-counteraction counter) source (my-step-instigator move) player (my-step-cards move) copy)
-				(append lst (theorize (counteraction counter) (counteraction counter) source (instigator move) player (cards-to-challenge move) copy)))
+				(append lst (theorize (counteraction counter) (counteraction counter) source (instigator move) player (cards move) copy)))
 			(dolist (copy lst)
 				(setq copy-of-copy (copy-game game))
 				(setq (slot-value copy 'parent) game)
@@ -142,7 +142,7 @@
 					(setq g1 (root g1))
 					(restore-step-stack g1)
 					(xth-last-item-of-stack (step-stack g1) 2))))
-		nil))
+		nil)))
 
 (defun challenge-card (card player game source target)
 	(if (not (null card))
@@ -209,6 +209,13 @@
 		((eq card 'Ambassador) 'Exchange)
 		((eq card 'Captain) 'Steal)
 		(T nil)))
+
+(defun get-counteraction (character)
+	(cond
+		((eq character 'Duke) 'BlocksForeignAid)
+		((eq character 'Ambassador) 'BlocksStealing)
+		((eq character 'Captain) 'BlocksStealing)
+		((eq character 'Contessa) 'BlocksAssassination)))
 
 (defun get-possible-blocks (action)
 	(cond
