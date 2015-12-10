@@ -1,3 +1,8 @@
+(setf *SUPPRESS-SIMILAR-CONSTANT-REDEITION-WARNING* t)
+
+(defpackage :ANDREW-HUBER)
+(in-package :ANDREW-HUBER)
+
 (defclass my-step ()
 	(
 		(effect :accessor my-step-effect :initarg effect)

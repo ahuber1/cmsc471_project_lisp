@@ -15,16 +15,16 @@
 (setq *max-queue-size* 2000)
 (setq *actions* (list 'Income 'ForeignAid 'Coup 'Duke 'Assassin 'Ambassador 'Captain 'Contessa))
 
-(defun perform-move (player game)
-	(setq queue (make-instnace 'my-queue))
+(defun perform-move (player game);
+	(setq queue (make-instance 'my-queue))
 	(setq g (convert-game game))
 	(enqueue queue g)
 	(setq g1 (perform-move-aux queue g player))
 	(restore-step-stack g1)
-	(xth-last-item-of-stack (step-stack g1) 1))
+	(xth-last-item-of-stack (my-step-effect (my-game-step-stack g1) 1)))
 
 (defun perform-move-aux (queue game player)
-	(while (not (null (my-queue-the-queue queue))) do
+	(loop while (not (null (my-queue-the-queue queue))) do
 		(setq g (dequeue queue))
 		(setq d (depth g))
 		(if (and (not (null (winner g))) (players-equal (winner g) player))
@@ -98,7 +98,7 @@
 		(enqueue queue (theorize (effect (peek-from-stack (my-game-step-stack game))) nil (my-game-current-player game) player player cards game)))
 	(setq g1 (perform-move queue game player))
 	(if (not (null g1))
-		(while (and (not (null g1)) (not (eq (my-game-parent g1) game))) do
+		(loop while (and (not (null g1)) (not (eq (my-game-parent g1) game))) do
 			(setq g1 = (my-game-parent g1)))
 		(if (not (null g1))
 			(dolist (step (my-game-step-stack g1))
@@ -141,7 +141,7 @@
 				(progn
 					(setq g1 (root g1))
 					(restore-step-stack g1)
-					(xth-last-item-of-stack (step-stack g1) 2))))
+					(xth-last-item-of-stack (my-game-step-stack g1) 2))))
 		nil)))
 
 (defun challenge-card (card player game source target)

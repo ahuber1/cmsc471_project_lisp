@@ -1,3 +1,8 @@
+(setf *SUPPRESS-SIMILAR-CONSTANT-REDEITION-WARNING* t)
+
+(defpackage :ANDREW-HUBER)
+(in-package :ANDREW-HUBER)
+
 (defclass my-stack ()
 	(
 		(the-stack :accessor my-stack-the-stack :initarg the-stack)

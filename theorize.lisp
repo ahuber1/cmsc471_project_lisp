@@ -1,3 +1,8 @@
+(setf *SUPPRESS-SIMILAR-CONSTANT-REDEITION-WARNING* t)
+
+(defpackage :ANDREW-HUBER)
+(in-package :ANDREW-HUBER)
+
 (defun theorize (effect instigator victim player cards game)
 	(cond
 		((eq effect 'Block) (theorize-block effect instigator victim player cards game num-coins lst))

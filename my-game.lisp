@@ -1,3 +1,8 @@
+(setf *SUPPRESS-SIMILAR-CONSTANT-REDEITION-WARNING* t)
+
+(defpackage :ANDREW-HUBER)
+(in-package :ANDREW-HUBER)
+
 (defclass my-game ()
 	(
 		;; PUBLIC -- list of players (each is an instance of type PLAYER)
