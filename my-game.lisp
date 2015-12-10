@@ -19,9 +19,25 @@
 	)
 )
 
+(defun looses (player game)
+	(setq (slot-value player 'coins) 0)
+	(append (my-game-eliminated game) player))
+
 ; are these copied correctly?
 (defun convert-game (game)
 	(make-instance 'my-game :players (copy-players (game-players game)) :eliminated (game-eliminated game) :rounds (game-rounds game)))
+
+(defun copy-players (origgame)
+	(copy-players-aux (game-players origgame) nil))
+
+(defun copy-players-aux (players lst)
+	(if (null players)
+		(lst)
+		(progn
+			(append lst (make-instance 'player :name (player-name (car players)) :hand (player-hand (car players)) :faceup (player-faceup (car players)) 
+				:exchange (player-exchange (car players)) :handcount (player-exchange (car players)) :numrounds (player-numrounds (car players))
+				:coins (player-coins (car players)) :crashed (player-coins (car players))))
+			(copy-players-aux (cdr players) lst))))
 
 (defun restore-step-stack (game)
 	(setf (slot-value game 'step-stack) nil)

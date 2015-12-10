@@ -250,3 +250,31 @@
 		((eq action 'Exchange) T)
 		((eq action 'Steal) T)
 		(T nil)))
+
+(defun remove-card (game player card-num)
+	(setq player (find-player game player))
+	(setq (slot-value player 'hand) (remove-xth-item-from-list (player-hand player) card-num)))
+
+(defun remove-xth-item-from-list (lst x)
+	(remove-xth-item-from-list-aux (lst nil x 1)))
+
+(defun remove-xth-item-from-list-aux (origlist newlist x i)
+	(if (null origlist)
+		(newlist)
+		(progn
+			(if (not (eq x i)) 
+				(append newlist (car origlist)))
+			(remove-xth-item-from-list-aux (cdr origlist) newlist x (+ i 1)))))
+
+
+
+
+
+
+
+
+
+
+
+
+
