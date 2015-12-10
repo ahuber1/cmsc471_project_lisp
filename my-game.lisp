@@ -21,7 +21,7 @@
 
 ; are these copied correctly?
 (defun convert-game (game)
-	(setq converted-game (make-instance 'my-game :players (copy-players (game-players game)) :eliminated (game-eliminated game) :rounds (game-rounds game))))
+	(make-instance 'my-game :players (copy-players (game-players game)) :eliminated (game-eliminated game) :rounds (game-rounds game)))
 
 (defun restore-step-stack (game)
 	(setf (slot-value game 'step-stack) nil)
@@ -30,8 +30,8 @@
 (defun depth (game)
 	(depth-aux game 0))
 
-(defun depth (game depthVal)
-	(if (null game) depthVal (depth (my-game-parent game) (+ depthVal 1))))
+(defun depth-aux (game depthVal)
+	(if (null game) depthVal (depth-aux (my-game-parent game) (+ depthVal 1))))
 
 (defun winner (game)
 	(setq counter 0)
@@ -54,7 +54,11 @@
 (defun backup-stack (game) (backup-stack-aux (my-game-step-stack game)))
 
 (defun backup-stack-aux (backup-stack)
-	(if (null backup-stack) (backup-stack) (append (list (car backup-stack)) (backup-stack-aux (cdr backup-stack)))))
+	(if (eq 0 (length (my-stack-the-stack backup-stack)))
+		(backup-stack)
+		(progn
+			(push-to-stack backup-stack)
+			(backup-stack-aux backup-stack))))
 
 (defun increment-player (game)
 	(setf (slot-value game 'current-player) (+ (my-game-current-player game) 1))
@@ -65,9 +69,6 @@
 	(dolist (player (my-game-players game))
 		(if (not (member (my-game-eliminated game) player)) 
 			(setq (slot-value player 'player-coins) (+ (player-coins player) num-coins)))))
-
-(defun set-parent-game (game parentGame)
-	(setq (slot-value game 'parent) parentGame))
 
 (defun calculate-heuristic (game inquirer original-game)
 	(setq x 0)

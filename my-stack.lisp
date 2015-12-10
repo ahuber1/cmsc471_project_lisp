@@ -14,3 +14,9 @@
 
 (defun peek-from-stack (stack)
 	(car (slot-value stack 'the-stack)))
+
+(defun stack-size (stack) 
+	(list-length (my-stack-the-stack stack)))
+
+(defun stack-empty (stack)
+	(eq 0 (list-length (my-stack-the-stack stack))))

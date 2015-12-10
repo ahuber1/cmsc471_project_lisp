@@ -14,3 +14,9 @@
 
 (defun peek-from-queue (queue)
 	(car (slot-value queue 'the-queue)))
+
+(defun queue-size (queue) 
+	(list-length (my-queue-the-queue queue)))
+
+(defun queue-empty (queue)
+	(eq 0 (list-length (my-queue-the-queue queue))))

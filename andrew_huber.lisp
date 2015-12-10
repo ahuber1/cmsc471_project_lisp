@@ -8,6 +8,8 @@
 (load "my-stack.lisp")
 (load "my-queue.lisp")
 (load "coup.lisp")
+(load "theorize.lisp")
+;(load "execute.lisp")
 
 (setq *depth* 0)
 (setq *max-queue-size* 2000)
@@ -30,23 +32,23 @@
 				(setq copy (copy-my-game g))
 				(setq (slot-value copy 'my-game-parent) (slot-value g 'my-game-parent))
 				(restore-step-stack copy)
-				g)
+				(return-from g))
 			(if (and (not (null (winner g))) (not (players-equal (winner g) player)))
 				() ; do nothing
-				(if (and (not (eq d *depth*)) (>= (list-length q) *max-queue-size*))
-					(perform-move-with-heuristic queue g game player)
+				(if (and (not (eq d *depth*)) (>= (queue-size q) *max-queue-size*))
+					(return-from (perform-move-with-heuristic queue g game player))
 					(progn
-						(setq p (current-player g))
+						(setq p (my-game-current-player g))
 						(dolist (action *actions*)
 							(setq games (theorize action nil p nil player nil g))
 							(dolist (gm games)
 								(setq c T)
-								(dolist (step-stack gm)
+								(dolist (my-game-step-stack gm)
 									(if c
 										(progn 
 											(backup-stack gm)
 											(setq step (pop (step-stack g)))
-											(setq c (and c (execute (effect step) (instigator step) (victim step) player (cards-to-challenge step) game T))))))
+											(setq c (and c (execute (my-step-effect step) (my-step-instigator step) (my-step-victim step) player (my-step-cards step) game T))))))
 								(if c
 									(progn
 										(increment-player gm)
@@ -58,7 +60,7 @@
 								(setq games (theorize action nil p nil player nil g))
 								(dolist (gm games)
 									(setq c T)
-									(dolist (step-stack gm)
+									(dolist (my-game-step-stack gm)
 										(if c
 											(progn
 												(backup-stack gm)
@@ -68,14 +70,14 @@
 										(progn
 											(increment-player gm)
 											(give-coins-to-all-players 2)
-											(parent-game gm g)))))))))))
+											(my-game-parent gm g)))))))))))
 	nil)
 
 (defun perform-move-with-heuristic (queue game origGame player)
 	(setq games (make-hash-table))
 	(setq count 0)
 	(setq keys nil)
-	(loop while (not (null (my-queue-the-queue queue))) do
+	(loop while (not (queue-empty queue)) do
 		(setq count (+ count 1))
 		(setq heuristic-value (calculate-heuristic game player origGame))
 		(setq lst (gethash 'heuristic-value games))
@@ -93,45 +95,46 @@
 	(setq possible-cards-to-assassinate (get-possible-cards-to-assassinate game player))
 	(dolist (possible-card possible-cards-to-assassinate)
 		(setq cards-to-exchange '(possible-card))
-		(enqueue queue (theorize (effect (peek (step-stack game))) nil (current-player game) player player cards-to-exchange game)))
+		(enqueue queue (theorize (effect (peek-from-stack (my-game-step-stack game))) nil (my-game-current-player game) player player cards-to-exchange game)))
 	(setq g1 (perform-move queue game player))
 	(if (not (null g1))
-		(while (and (not (null g1)) (not (eq (parent-game g1) game))) do
-			(setq g1 = (parent-game g1)))
+		(while (and (not (null g1)) (not (eq (my-game-parent g1) game))) do
+			(setq g1 = (my-game-parent g1)))
 		(if (not (null g1))
-			(dolist (step (step-stack g1))
-				(if (is-action (effect step))
+			(dolist (step (my-game-step-stack g1))
+				(if (is-action (my-step-effect step))
 					(+ (index-of (cards player) (cards-to-challenge step)))))))
 	(if (> (cards player) 0)
 		(+ (random (list-length (cards player))) 1)
 		-1))
 
 (defun get-possible-cards-to-assassinate (game player)
-	(if (eq (current-player game) player)
+	(if (eq (my-game-current-player game) player)
 		(cards player)
 		coup::Characters))
 
 (defun block-move (move player game source target)
-	(if (is-action (effect move))
+	(if (is-action (my-step-effect move))
 		(progn
 			(setq action (effect move))
 			(setq blocks (get-possible-blocks action))
 			(setq lst nil)
 			(setq queue (make-instance 'queue))
 			(dolist (counter blocks)
-				(setq game-copy (copy-my-game game))
-				(clear-stacks game-copy)
-				(append (step-stack game-copy) move)
-				(append lst (theorize (counteraction counter) (counteraction counter) source (instigator move) player (cards-to-challenge move) game-copy)))
+				(setq copy (copy-my-game game))
+				(clear-stacks copy)
+				(push-to-stack (my-game-step-stack copy) move)
+				(append lst (theorize (get-counteraction counter) source (my-step-instigator move) player (my-step-cards move) copy)
+				(append lst (theorize (counteraction counter) (counteraction counter) source (instigator move) player (cards-to-challenge move) copy)))
 			(dolist (copy lst)
-				(setq copy-of-copy (copy-my-game game))
-				(parent-game copy game)
-				(parent-game copy-of-copy copy)
+				(setq copy-of-copy (copy-game game))
+				(setq (slot-value copy 'parent) game)
+				(setq (slot-value copy-of-copy 'parent) copy)
 				(backup-stack copy)
 				(increment-player copy-of-copy)				
 				(give-coins-to-all-players copy-of-copy 2)
 				(clear-stacks copy-of-copy)
-				(append queue copy-of-copy))
+				(enqueue queue copy-of-copy))
 			(setq g1 (perform-move queue game player))
 			(if (null g1)
 				(null)
@@ -143,16 +146,16 @@
 
 (defun challenge-card (card player game source target)
 	(if (not (null card))
-		(if (is-block (effect (peek (step-stack game))))
+		(if (is-block (my-step-effect (peek-from-stack (my-game-step-stack game))))
 			(progn
 				(setq block (effect (peek (step-stack game))))
 				(setq lst nil)
-				(setq queue (make-instance 'queue))
-				(append lst (theorize challenge block player (instigator (peek (step-stack game))) player (cards-to-challenge (peek (step-stack game))) game))
+				(setq queue (make-instance 'my-queue))
+				(append lst (theorize 'Challenge block player (instigator (peek (step-stack game))) player (my-step-cards (peek-from-stack (my-game-step-stack game))) game))
 				(dolist (copy lst)
 					(setq copy-of-copy (copy-my-game game))
-					(parent-game copy game)
-					(parent-game copy-of-copy copy)
+					(setq (slot-value copy 'parent) game)
+					(setq (slot-value-copy-of-copy 'parent) copy)
 					(backup-stack copy)
 					(increment-player copy-of-copy)				
 					(give-coins-to-all-players copy-of-copy 2)
@@ -160,7 +163,7 @@
 					(enqueue queue copy-of-copy))
 				(setq g1 (perform-move queue game player))
 				(if (not (null g1))
-					(if (is-challenge (effect (peek (step-stack g1))))
+					(if (is-challenge (my-step-effect (peek-from-stack (my-game-step-stack g1))))
 						(T)
 						(nil))
 					(nil)))
@@ -170,8 +173,8 @@
 					(setq lst nil)
 					(setq q nil)
 					(setq game-copy (copy-my-game game))
-					(append lst (theorize challenge nil source (victim (peek (step-stack game))) player (cards-to-challenge (peek (step-stack game))) game-copy))
-					(dolist (copy list)
+					(append lst (theorize challenge nil source (my-step-victim (peek-from-stack (my-game-step-stack game))) player (my-step-cards (peek-from-stack (my-game-step-stack game))) game-copy))
+					(dolist (copy lst)
 						(setq copy-of-copy (copy-my-game game))
 						(parent-game copy game)
 						(parent-game copy-of-copy copy)
@@ -186,7 +189,7 @@
 						(progn
 							(setq g1 (root g1))
 							(restore-step-stack g1)
-							(is-challenge (effect (xth-last-item-of-stack (step-stack g1) 2)))))))))
+							(is-challenge (my-step-effect (xth-last-item-of-stack (my-game-step-stack g1) 2)))))))))
 	nil)
 
 (defun index-of (lst item)
@@ -240,15 +243,3 @@
 		((eq action 'Exchange) T)
 		((eq action 'Steal) T)
 		(T nil)))
-
-
-
-
-
-
-
-
-
-
-
-

@@ -38,7 +38,7 @@
 (defconstant DefaultMove 'Income)
 
 ;; List of possible characters
-(defconstant Characters '(Duke Assassin Ambassador Captain Contessa))
+(defconstant Characters '( Assassin Ambassador Captain Contessa))
 
 ;; Number of cards per character
 (defconstant CardsPerCharacter 3)
