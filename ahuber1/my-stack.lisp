@@ -10,9 +10,6 @@
 )
 
 (defun push-to-stack (stack item)
-	(print "push-to-stack")
-	(print stack)
-	(print item)
 	(setf (slot-value stack 'the-stack) (append (list item) (my-stack-the-stack stack))))
 
 (defun pop-from-stack (stack)

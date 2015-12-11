@@ -30,8 +30,8 @@
 
 (defun looses (player game)
 	(print "looses")
-	(setq (slot-value player 'coins) 0)
-	(setq (slot-value game 'eliminated (append (my-game-eliminated game) player))))
+	(setf (slot-value player 'coins) 0)
+	(setf (slot-value game 'eliminated) (append (my-game-eliminated game) player)))
 
 ; are these copied correctly?
 (defun convert-game (game player)
@@ -49,9 +49,9 @@
 	(if (null players)
 		lst
 		(progn
-			(setq lst (append lst (list (make-instance 'coup::player :name (coup::player-name (car players)) :hand (coup::player-hand (car players)) :faceup (coup::player-faceup (car players)) 
-				:exchange (coup::player-exchange (car players)) :handcount (coup::player-exchange (car players)) :numrounds (coup::player-numrounds (car players))
-				:coins (coup::player-coins (car players)) :crashed (coup::player-coins (car players))))))
+			(setf lst (append lst (list (make-instance 'coup::player :name (coup::player-name (car players)) :hand (coup::player-hand (car players)) :faceup (coup::player-faceup (car players)) 
+				:exchange (coup::player-exchange (car players)) :handcount (coup::player-handcount (car players)) :numrounds (coup::player-numrounds (car players))
+				:coins (coup::player-coins (car players)) :crashed (coup::player-crashed (car players))))))
 			(copy-players-aux (cdr players) lst))))
 
 (defun restore-step-stack (game)
@@ -71,13 +71,13 @@
 
 (defun winner (game)
 	(print "winner")
-	(setq counter 0)
-	(setq winner nil)
+	(setf counter 0)
+	(setf winner nil)
 	(dolist (player (my-game-players game))
 		(if (not (lost player))
 			(progn
-				(setq winner player)
-				(setq counter (+ counter 1)))))
+				(setf winner player)
+				(setf counter (+ counter 1)))))
 	(if (eq counter 1) winner nil))
 
 (defun players-equal (player1 player2)
@@ -94,15 +94,7 @@
 
 (defun backup-stack (game) 
 	(print "backup-stack")
-	(backup-stack-aux (my-game-step-stack game)))
-
-(defun backup-stack-aux (backup-stack)
-	(print "backup-stack-aux")
-	(if (eq 0 (length (my-stack-the-stack backup-stack)))
-		(backup-stack)
-		(progn
-			(push-to-stack backup-stack)
-			(backup-stack-aux backup-stack))))
+	(setf (slot-value game 'backup-stack) (copy-stack (my-game-step-stack game))))
 
 (defun increment-player (game)
 	(print "increment-player")
@@ -113,18 +105,18 @@
 (defun give-coins-to-all-players (game num-coins)
 	(print "give-coins-to-all-players")
 	(dolist (player (my-game-players game))
-		(if (not (member (my-game-eliminated game) player)) 
-			(setq (slot-value player 'player-coins) (+ (player-coins player) num-coins)))))
+		(if (and (> (list-length (my-game-eliminated game)) 0) (not (member (my-game-eliminated game) player))) 
+			(setf (slot-value player 'coup::player-coins) (+ (coup::player-coins player) num-coins)))))
 
 (defun calculate-heuristic (game inquirer original-game)
 	(print "calculate-heuristic")
-	(setq x 0)
+	(setf x 0)
 	(dolist (player (my-game-players game))
-		(setq coins-gained (- (player-coins player) (player-coins (find-player original-game player))))
-		(setq cards-lost (- (hand-count (find-player original-game player)) (hand-count player)))
+		(setf coins-gained (- (player-coins player) (player-coins (find-player original-game player))))
+		(setf cards-lost (- (hand-count (find-player original-game player)) (hand-count player)))
 		(if (players-equal player inquirer) 
-			(setq x (+ x cards-lost)) 
-			(setq x (+ x(* (* (list-length (my-game-players game)) (list-length (my-game-players game))) cards-lost)))))
+			(setf x (+ x cards-lost)) 
+			(setf x (+ x(* (* (list-length (my-game-players game)) (list-length (my-game-players game))) cards-lost)))))
 	x)
 
 (defun get-other-players-except (game player)
@@ -138,7 +130,7 @@
 			players-found)
 		(progn
 			(if (players-equal player (car players))
-				(setq players-found (append players-found (list (car players)))))
+				(setf players-found (append players-found (list (car players)))))
 			(get-other-players-except-aux player (cdr players) players-found))))
 
 (defun lost (player)
@@ -155,7 +147,7 @@
 	(if (null (my-game-parent game))
 		() ; do nothing
 		(while (not (null (my-game-parent (my-game-parent (game))))) do
-			(setq game (my-game-parent game))))
+			(setf game (my-game-parent game))))
 	game)
 
 
