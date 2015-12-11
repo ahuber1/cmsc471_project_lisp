@@ -15,14 +15,16 @@
 (setq *max-queue-size* 2000)
 
 (defun perform-move (player game)
+	(print "perform-move")
 	(setq queue (make-instance 'my-queue))
-	(setq g (convert-game game))
+	(setq g (convert-game game player))
 	(enqueue queue g)
 	(setq g1 (perform-move-aux queue g player))
 	(restore-step-stack g1)
 	(xth-last-item-of-stack (my-step-effect (my-game-step-stack g1) 1)))
 
 (defun perform-move-aux (queue game player)
+	(print "perform-move-aux")
 	(loop while (not (null (my-queue-the-queue queue))) do
 		(setq g (dequeue queue))
 		(setq d (depth g))
@@ -73,6 +75,7 @@
 	nil)
 
 (defun perform-move-with-heuristic (queue game origGame player)
+	(print "perform-move-with-heuristic")
 	(setq games (make-hash-table))
 	(setq count 0)
 	(setq keys nil)
@@ -90,6 +93,7 @@
 	(car (gethash 'heuristic-value games)))
 
 (defun reveal-card (player game)
+	(print "reveal-card")
 	(setq queue (make-instance 'queue))
 	(setq possible-cards-to-assassinate (get-possible-cards-to-assassinate game player))
 	(dolist (possible-card possible-cards-to-assassinate)
@@ -108,11 +112,13 @@
 		-1))
 
 (defun get-possible-cards-to-assassinate (game player)
+	(print "get-possible-cards-to-assassinate")
 	(if (players-equal (current-player-object game) player)
 		(cards player)
 		coup::Characters))
 
 (defun block-move (move player game source target)
+	(print "block-move")
 	(if (is-action (my-step-effect move))
 		(progn
 			(setq action (effect move))
@@ -144,6 +150,7 @@
 		nil)))
 
 (defun challenge-card (card player game source target)
+	(print "challenge-card")
 	(if (not (null card))
 		(if (is-block (my-step-effect (peek-from-stack (my-game-step-stack game))))
 			(progn
@@ -192,9 +199,11 @@
 	nil)
 
 (defun index-of (lst item)
+	(print "index-of")
 	(index-of-aux lst item 0))
 
 (defun index-of-aux (lst item index)
+	(print "index-of-aux")
 	(if (null lst)
 		-1
 		(if (eq item (car lst))
@@ -202,6 +211,7 @@
 			(index-of-aux (cdr lst) item (+ index 1)))))
 
 (defun get-action (card)
+	(print "get-action")
 	(cond 
 		((eq card 'Duke) 'Tax)
 		((eq card 'Assassin) 'Assassinate)
@@ -210,6 +220,7 @@
 		(T nil)))
 
 (defun get-counteraction (character)
+	(print "get-counteraction")
 	(cond
 		((eq character 'Duke) 'BlocksForeignAid)
 		((eq character 'Ambassador) 'BlocksStealing)
@@ -217,6 +228,7 @@
 		((eq character 'Contessa) 'BlocksAssassination)))
 
 (defun get-possible-blocks (action)
+	(print "get-possible-blocks")
 	(cond
 		((eq action 'ForeignAid) (list 'Duke))
 		((eq action 'Stealing) (list 'Ambassador 'Captain))
@@ -224,11 +236,13 @@
 		(T nil)))
 
 (defun get-possible-cards-to-assassinate (game player)
+	(print "get-possible-cards-to-assassinate")
 	(if (players-equal (current-player-object game) player)
 		(copy-list (player-hand player)) 
 		coup::Characters))
 
 (defun is-block (block)
+	(print "is-block")
 	(cond
 		((eq block 'Duke) T)
 		((eq block 'Ambassador) T)
@@ -237,27 +251,32 @@
 		(T nil)))
 
 (defun is-challenge (challenge)
+	(print "is-challenge")
 	(eq challenge 'Challenge))
 
 (defun is-action (action)
+	(print "is-action")
 	(cond
-		((eq action 'Income) T)
-		((eq action 'ForeignAid) T)
-		((eq action 'Coup) T)
-		((eq action 'Tax) T)
-		((eq action 'Assassinate) T)
-		((eq action 'Exchange) T)
-		((eq action 'Steal) T)
+		((eq action 'coup::Income) T)
+		((eq action 'coup::ForeignAid) T)
+		((eq action 'coup::Coup) T)
+		((eq action 'coup::Tax) T)
+		((eq action 'coup::Assassinate) T)
+		((eq action 'coup::Exchange) T)
+		((eq action 'coup::Steal) T)
 		(T nil)))
 
 (defun remove-card (game player card-num)
+	(print "remove-card")
 	(setq player (find-player game player))
 	(setq (slot-value player 'hand) (remove-xth-item-from-list (player-hand player) card-num)))
 
 (defun remove-xth-item-from-list (lst x)
+	(print "remove-xth-item-from-list")
 	(remove-xth-item-from-list-aux (lst nil x 1)))
 
 (defun remove-xth-item-from-list-aux (origlist newlist x i)
+	(print "remove-xth-item-from-list-aux")
 	(if (null origlist)
 		newlist
 		(progn
@@ -265,7 +284,16 @@
 				(append newlist (car origlist)))
 			(remove-xth-item-from-list-aux (cdr origlist) newlist x (+ i 1)))))
 
-
+(defun get-card (effect)
+	(cond
+		((eq effect 'coup::Income) nil)
+		((eq effect 'coup::ForeignAid) nil)
+		((eq effect 'coup::Coup) nil)
+		((eq effect 'coup::Tax) 'coup::Duke)
+		((eq effect 'coup::Assassinate) 'coup::Assassin)
+		((eq effect 'coup::Exchange) 'coup::Ambassador)
+		((eq effect 'coup::Steal) 'coup::Captain)
+		(T (error "Invalid value"))))
 
 
 

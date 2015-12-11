@@ -50,7 +50,7 @@
 (defconstant CoinsForCoup 7)
 
 ;; True if stop on errors
-(defconstant *debug* nil)
+(defconstant *debug* T)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
